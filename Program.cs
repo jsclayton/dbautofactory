@@ -15,10 +15,14 @@ namespace DbAutoFactory
             builder.RegisterType<Database>().As<IDatabase>();
             builder.Register(c => new Foo(c.Resolve<IConfig>().GetDatabase("Foo")));
             builder.Register(c => new Bar(c.Resolve<IConfig>().GetDatabase("Bar")));
+            builder.RegisterType<Lorem>();
+            builder.RegisterType<Ipsum>();
             using (var container = builder.Build())
             {
                 container.Resolve<Foo>().Write();
                 container.Resolve<Bar>().Write();
+                var lorem = container.Resolve<Lorem>();
+                var ipsum = container.Resolve<Ipsum>();
             }
 
             Console.ReadLine();
@@ -54,6 +58,26 @@ namespace DbAutoFactory
         {
             Console.Write("Bar is writing => ");
             database.Write();
+        }
+    }
+
+    internal class Lorem
+    {
+        private readonly DatabaseFactory databaseFactory;
+
+        public Lorem(DatabaseFactory databaseFactory)
+        {
+            this.databaseFactory = databaseFactory;
+        }
+    }
+
+    internal class Ipsum
+    {
+        private readonly IConfig config;
+
+        public Ipsum(IConfig config)
+        {
+            this.config = config;
         }
     }
 }
