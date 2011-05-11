@@ -7,6 +7,9 @@ namespace DbAutoFactory
     {
         private static void Main(string[] args)
         {
+            // http://code.google.com/p/autofac/wiki/DelegateFactories
+            // If type T is registered with the container, Autofac will automatically resolve dependencies 
+            // on Func<T> as factories that create T instances through the container.
             var builder = new ContainerBuilder();
             builder.RegisterType<DummyConfig>().As<IConfig>();
             builder.RegisterType<Database>().As<IDatabase>();
